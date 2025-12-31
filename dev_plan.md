@@ -34,12 +34,12 @@ Tappable frog that flaps upward and falls with gravity. Stops at ground/ceiling.
 **Goal**: Add scrolling obstacles the frog must navigate through.
 
 ### Tasks
-- [ ] Create `ObstaclePair` class for top/bottom obstacle pair with gap
-- [ ] Implement obstacle spawning at regular intervals
-- [ ] Add horizontal scrolling (obstacles move left)
-- [ ] Remove obstacles when they exit screen left
-- [ ] Randomize gap vertical position within safe bounds
-- [ ] Add scrolling ground/background for movement feel
+- [x] Create `ObstaclePair` class for top/bottom obstacle pair with gap
+- [x] Implement obstacle spawning at regular intervals
+- [x] Add horizontal scrolling (obstacles move left)
+- [x] Remove obstacles when they exit screen left
+- [x] Randomize gap vertical position within safe bounds
+- [x] Add scrolling ground/background for movement feel
 
 ### Deliverable
 Obstacles scroll from right to left with randomized gaps. World feels like it's moving.
@@ -196,7 +196,7 @@ FlyingFrogs/
 | Phase | Status | Notes |
 |-------|--------|-------|
 | 1. Core Physics | ✅ Complete | FrogSprite, gravity, flap, rotation, boundaries |
-| 2. Scrolling World | Not Started | |
+| 2. Scrolling World | ✅ Complete | ObstaclePair, spawning, scrolling ground |
 | 3. Collision & Game Over | Not Started | |
 | 4. Scoring | Not Started | |
 | 5. Game States | Not Started | |
