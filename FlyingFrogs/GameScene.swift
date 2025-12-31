@@ -14,8 +14,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     private let scrollSpeed: CGFloat = 150        // Points per second
     private let obstacleSpawnInterval: TimeInterval = 2.0
-    private let groundHeight: CGFloat = 50
+    private let groundHeight: CGFloat = 60
     private let highScoreKey = "FlyingFrogsHighScore"
+
+    // Parallax speeds (multiplier of base scroll speed)
+    private let cloudsParallaxSpeed: CGFloat = 0.1
+    private let hillsParallaxSpeed: CGFloat = 0.3
 
     // MARK: - Properties
 
@@ -23,6 +27,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var groundPair: (SKSpriteNode, SKSpriteNode)!
     private var ceiling: SKSpriteNode!
     private var scoreLabel: SKLabelNode!
+
+    // Parallax background layers
+    private var cloudsPair: (SKSpriteNode, SKSpriteNode)!
+    private var hillsPair: (SKSpriteNode, SKSpriteNode)!
 
     private var isGameActive = false
     private var isGameOver = false
@@ -54,21 +62,68 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     private func setupBackground() {
-        backgroundColor = SKColor(red: 0.4, green: 0.7, blue: 1.0, alpha: 1.0)
+        // Sky gradient background (static)
+        let skyTexture = SKTexture(imageNamed: "BackgroundSky")
+        let sky = SKSpriteNode(texture: skyTexture, size: size)
+        sky.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        sky.zPosition = -10
+        addChild(sky)
+
+        // Clouds layer (slow parallax)
+        let cloudsTexture = SKTexture(imageNamed: "BackgroundClouds")
+        let cloudsHeight = size.height * 0.5
+        let cloudsWidth = size.width * 1.5  // Wider for seamless scrolling
+
+        let clouds1 = SKSpriteNode(texture: cloudsTexture,
+                                    size: CGSize(width: cloudsWidth, height: cloudsHeight))
+        clouds1.anchorPoint = CGPoint(x: 0, y: 0)
+        clouds1.position = CGPoint(x: 0, y: size.height * 0.4)
+        clouds1.zPosition = -8
+
+        let clouds2 = SKSpriteNode(texture: cloudsTexture,
+                                    size: CGSize(width: cloudsWidth, height: cloudsHeight))
+        clouds2.anchorPoint = CGPoint(x: 0, y: 0)
+        clouds2.position = CGPoint(x: cloudsWidth, y: size.height * 0.4)
+        clouds2.zPosition = -8
+
+        addChild(clouds1)
+        addChild(clouds2)
+        cloudsPair = (clouds1, clouds2)
+
+        // Hills layer (medium parallax)
+        let hillsTexture = SKTexture(imageNamed: "BackgroundHills")
+        let hillsHeight: CGFloat = 150
+        let hillsWidth = size.width * 1.5
+
+        let hills1 = SKSpriteNode(texture: hillsTexture,
+                                   size: CGSize(width: hillsWidth, height: hillsHeight))
+        hills1.anchorPoint = CGPoint(x: 0, y: 0)
+        hills1.position = CGPoint(x: 0, y: groundHeight)
+        hills1.zPosition = -5
+
+        let hills2 = SKSpriteNode(texture: hillsTexture,
+                                   size: CGSize(width: hillsWidth, height: hillsHeight))
+        hills2.anchorPoint = CGPoint(x: 0, y: 0)
+        hills2.position = CGPoint(x: hillsWidth, y: groundHeight)
+        hills2.zPosition = -5
+
+        addChild(hills1)
+        addChild(hills2)
+        hillsPair = (hills1, hills2)
     }
 
     private func setupScrollingGround() {
-        // Create two ground sprites for seamless scrolling
-        let groundColor = SKColor(red: 0.4, green: 0.25, blue: 0.1, alpha: 1.0)
+        // Create two ground sprites for seamless scrolling with texture
+        let groundTexture = SKTexture(imageNamed: "GroundTexture")
 
-        let ground1 = SKSpriteNode(color: groundColor,
+        let ground1 = SKSpriteNode(texture: groundTexture,
                                    size: CGSize(width: size.width, height: groundHeight))
         ground1.anchorPoint = CGPoint(x: 0, y: 0)
         ground1.position = CGPoint(x: 0, y: 0)
         ground1.zPosition = 10
         ground1.name = "ground"
 
-        let ground2 = SKSpriteNode(color: groundColor,
+        let ground2 = SKSpriteNode(texture: groundTexture,
                                    size: CGSize(width: size.width, height: groundHeight))
         ground2.anchorPoint = CGPoint(x: 0, y: 0)
         ground2.position = CGPoint(x: size.width, y: 0)
@@ -319,6 +374,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         groundPair.0.position = CGPoint(x: 0, y: 0)
         groundPair.1.position = CGPoint(x: size.width, y: 0)
 
+        // Reset parallax layers
+        let cloudsWidth = cloudsPair.0.size.width
+        cloudsPair.0.position.x = 0
+        cloudsPair.1.position.x = cloudsWidth
+
+        let hillsWidth = hillsPair.0.size.width
+        hillsPair.0.position.x = 0
+        hillsPair.1.position.x = hillsWidth
+
         // Reset frog
         frog.reset(at: CGPoint(x: size.width * 0.3, y: size.height / 2))
 
@@ -369,6 +433,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         frog.updateRotation()
         updateScrollingGround()
+        updateParallaxLayers()
     }
 
     private func updateScrollingGround() {
@@ -384,6 +449,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         if groundPair.1.position.x <= -size.width {
             groundPair.1.position.x = groundPair.0.position.x + size.width
+        }
+    }
+
+    private func updateParallaxLayers() {
+        let baseSpeed = scrollSpeed / 60.0
+
+        // Scroll clouds (slowest)
+        let cloudsSpeed = baseSpeed * cloudsParallaxSpeed
+        let cloudsWidth = cloudsPair.0.size.width
+
+        cloudsPair.0.position.x -= cloudsSpeed
+        cloudsPair.1.position.x -= cloudsSpeed
+
+        if cloudsPair.0.position.x <= -cloudsWidth {
+            cloudsPair.0.position.x = cloudsPair.1.position.x + cloudsWidth
+        }
+        if cloudsPair.1.position.x <= -cloudsWidth {
+            cloudsPair.1.position.x = cloudsPair.0.position.x + cloudsWidth
+        }
+
+        // Scroll hills (medium speed)
+        let hillsSpeed = baseSpeed * hillsParallaxSpeed
+        let hillsWidth = hillsPair.0.size.width
+
+        hillsPair.0.position.x -= hillsSpeed
+        hillsPair.1.position.x -= hillsSpeed
+
+        if hillsPair.0.position.x <= -hillsWidth {
+            hillsPair.0.position.x = hillsPair.1.position.x + hillsWidth
+        }
+        if hillsPair.1.position.x <= -hillsWidth {
+            hillsPair.1.position.x = hillsPair.0.position.x + hillsWidth
         }
     }
 }

@@ -114,8 +114,8 @@ Game looks polished with proper art assets and animations.
 **Goal**: Create a proper scrolling background.
 
 ### Tasks
-- [ ] Add parallax scrolling background layers
-- [ ] Create ground texture that tiles seamlessly
+- [x] Add parallax scrolling background layers
+- [x] Create ground texture that tiles seamlessly
 
 ### Deliverable
 Game looks polished with proper art assets and animations.

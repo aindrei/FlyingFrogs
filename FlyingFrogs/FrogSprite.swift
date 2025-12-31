@@ -11,7 +11,7 @@ class FrogSprite: SKSpriteNode {
 
     // MARK: - Constants
 
-    private let flapImpulse: CGFloat = 30
+    private let flapImpulse: CGFloat = 35
     private let maxUpwardRotation: CGFloat = .pi / 6      // 30 degrees up
     private let maxDownwardRotation: CGFloat = -.pi / 2   // 90 degrees down
 

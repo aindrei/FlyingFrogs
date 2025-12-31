@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <!-- Cloud 1 -->
+  <g opacity="0.9">
+    <ellipse cx="80" cy="80" rx="45" ry="30" fill="white"/>
+    <ellipse cx="120" cy="70" rx="50" ry="35" fill="white"/>
+    <ellipse cx="160" cy="85" rx="40" ry="28" fill="white"/>
+    <ellipse cx="100" cy="95" rx="35" ry="20" fill="white"/>
+  </g>
+
+  <!-- Cloud 2 -->
+  <g opacity="0.8">
+    <ellipse cx="350" cy="150" rx="55" ry="35" fill="white"/>
+    <ellipse cx="400" cy="140" rx="45" ry="30" fill="white"/>
+    <ellipse cx="440" cy="155" rx="50" ry="32" fill="white"/>
+    <ellipse cx="380" cy="165" rx="40" ry="25" fill="white"/>
+  </g>
+
+  <!-- Cloud 3 -->
+  <g opacity="0.85">
+    <ellipse cx="550" cy="60" rx="40" ry="25" fill="white"/>
+    <ellipse cx="580" cy="50" rx="35" ry="22" fill="white"/>
+    <ellipse cx="530" cy="70" rx="30" ry="20" fill="white"/>
+  </g>
+
+  <!-- Cloud 4 (wraps from left) -->
+  <g opacity="0.75">
+    <ellipse cx="200" cy="280" rx="50" ry="32" fill="white"/>
+    <ellipse cx="250" cy="270" rx="55" ry="36" fill="white"/>
+    <ellipse cx="300" cy="285" rx="45" ry="28" fill="white"/>
+    <ellipse cx="240" cy="295" rx="40" ry="22" fill="white"/>
+  </g>
+
+  <!-- Cloud 5 -->
+  <g opacity="0.7">
+    <ellipse cx="480" cy="320" rx="38" ry="24" fill="white"/>
+    <ellipse cx="520" cy="310" rx="42" ry="28" fill="white"/>
+    <ellipse cx="500" cy="330" rx="35" ry="20" fill="white"/>
+  </g>
+</svg>

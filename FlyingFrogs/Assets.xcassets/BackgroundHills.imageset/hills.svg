@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200" viewBox="0 0 600 200">
+  <!-- Back hills (darker) -->
+  <path d="M0 200
+           Q50 120 100 140
+           Q180 100 250 130
+           Q320 80 400 120
+           Q480 90 550 130
+           Q600 110 600 200 Z"
+        fill="#66BB6A"/>
+
+  <!-- Front hills (lighter) -->
+  <path d="M0 200
+           Q80 150 150 170
+           Q220 130 300 160
+           Q380 120 450 150
+           Q520 130 600 160
+           L600 200 Z"
+        fill="#81C784"/>
+
+  <!-- Some simple trees on hills -->
+  <g fill="#43A047">
+    <!-- Tree 1 -->
+    <ellipse cx="100" cy="165" rx="12" ry="18"/>
+    <ellipse cx="108" cy="160" rx="10" ry="15"/>
+
+    <!-- Tree 2 -->
+    <ellipse cx="250" cy="155" rx="14" ry="20"/>
+    <ellipse cx="260" cy="150" rx="11" ry="16"/>
+
+    <!-- Tree 3 -->
+    <ellipse cx="420" cy="145" rx="13" ry="19"/>
+    <ellipse cx="410" cy="150" rx="10" ry="14"/>
+
+    <!-- Tree 4 -->
+    <ellipse cx="550" cy="155" rx="11" ry="16"/>
+  </g>
+</svg>
