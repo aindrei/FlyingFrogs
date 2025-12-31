@@ -11,18 +11,17 @@ class FrogSprite: SKSpriteNode {
 
     // MARK: - Constants
 
-    private let flapImpulse: CGFloat = 40
+    private let flapImpulse: CGFloat = 30
     private let maxUpwardRotation: CGFloat = .pi / 6      // 30 degrees up
     private let maxDownwardRotation: CGFloat = -.pi / 2   // 90 degrees down
 
     // MARK: - Initialization
 
     init() {
-        // Placeholder: green rounded rectangle
-        let size = CGSize(width: 40, height: 30)
-        let color = SKColor(red: 0.2, green: 0.8, blue: 0.2, alpha: 1.0)
+        let texture = SKTexture(imageNamed: "Frog")
+        let size = CGSize(width: 50, height: 38)  // Scaled from 80x60 SVG
 
-        super.init(texture: nil, color: color, size: size)
+        super.init(texture: texture, color: .clear, size: size)
 
         setupPhysics()
     }

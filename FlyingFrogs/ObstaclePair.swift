@@ -29,19 +29,17 @@ class ObstaclePair: SKNode {
         let bottomHeight = gapCenterY - gapHeight / 2
         let topHeight = sceneHeight - (gapCenterY + gapHeight / 2)
 
-        // Create bottom obstacle (log/lily pad color)
-        bottomObstacle = SKSpriteNode(
-            color: SKColor(red: 0.3, green: 0.6, blue: 0.3, alpha: 1.0),
-            size: CGSize(width: obstacleWidth, height: bottomHeight)
-        )
+        // Create bottom obstacle with texture
+        let bottomTexture = SKTexture(imageNamed: "ObstacleBottom")
+        bottomObstacle = SKSpriteNode(texture: bottomTexture,
+                                       size: CGSize(width: obstacleWidth, height: bottomHeight))
         bottomObstacle.anchorPoint = CGPoint(x: 0.5, y: 0)
         bottomObstacle.position = CGPoint(x: 0, y: 0)
 
-        // Create top obstacle
-        topObstacle = SKSpriteNode(
-            color: SKColor(red: 0.3, green: 0.6, blue: 0.3, alpha: 1.0),
-            size: CGSize(width: obstacleWidth, height: topHeight)
-        )
+        // Create top obstacle with texture
+        let topTexture = SKTexture(imageNamed: "ObstacleTop")
+        topObstacle = SKSpriteNode(texture: topTexture,
+                                    size: CGSize(width: obstacleWidth, height: topHeight))
         topObstacle.anchorPoint = CGPoint(x: 0.5, y: 1)
         topObstacle.position = CGPoint(x: 0, y: sceneHeight)
 

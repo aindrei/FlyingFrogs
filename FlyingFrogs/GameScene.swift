@@ -15,16 +15,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let scrollSpeed: CGFloat = 150        // Points per second
     private let obstacleSpawnInterval: TimeInterval = 2.0
     private let groundHeight: CGFloat = 50
+    private let highScoreKey = "FlyingFrogsHighScore"
 
     // MARK: - Properties
 
     private var frog: FrogSprite!
     private var groundPair: (SKSpriteNode, SKSpriteNode)!
     private var ceiling: SKSpriteNode!
+    private var scoreLabel: SKLabelNode!
 
     private var isGameActive = false
     private var isGameOver = false
     private var canRestart = false
+
+    private var score = 0
+    private var highScore: Int {
+        get { UserDefaults.standard.integer(forKey: highScoreKey) }
+        set { UserDefaults.standard.set(newValue, forKey: highScoreKey) }
+    }
 
     // MARK: - Scene Lifecycle
 
@@ -34,6 +42,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupScrollingGround()
         setupCeiling()
         setupFrog()
+        setupScoreLabel()
         setupInstructions()
     }
 
@@ -104,6 +113,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         frog.reset(at: frog.position)
     }
 
+    private func setupScoreLabel() {
+        scoreLabel = SKLabelNode(fontNamed: "Helvetica-Bold")
+        scoreLabel.text = "0"
+        scoreLabel.fontSize = 48
+        scoreLabel.fontColor = .white
+        scoreLabel.position = CGPoint(x: size.width / 2, y: size.height - 80)
+        scoreLabel.zPosition = 20
+        scoreLabel.alpha = 0  // Hidden until game starts
+        addChild(scoreLabel)
+    }
+
     private func setupInstructions() {
         let label = SKLabelNode(fontNamed: "Helvetica-Bold")
         label.text = "Tap to Flap!"
@@ -138,6 +158,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func startGame() {
         isGameActive = true
         frog.startPlaying()
+
+        // Show score label
+        scoreLabel.alpha = 1
 
         // Remove instructions
         if let instructions = childNode(withName: "instructions") {
@@ -207,6 +230,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.removeAllActions()
         }
 
+        // Update high score if needed
+        let isNewHighScore = score > highScore
+        if isNewHighScore {
+            highScore = score
+        }
+
         // Flash screen red briefly
         let flash = SKSpriteNode(color: .red, size: size)
         flash.position = CGPoint(x: size.width / 2, y: size.height / 2)
@@ -219,21 +248,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             SKAction.removeFromParent()
         ]))
 
-        // Show game over and restart prompt
+        // Show game over and score
         let gameOverLabel = SKLabelNode(fontNamed: "Helvetica-Bold")
         gameOverLabel.text = "Game Over"
         gameOverLabel.fontSize = 40
         gameOverLabel.fontColor = .white
-        gameOverLabel.position = CGPoint(x: size.width / 2, y: size.height / 2 + 30)
+        gameOverLabel.position = CGPoint(x: size.width / 2, y: size.height / 2 + 60)
         gameOverLabel.zPosition = 20
         gameOverLabel.name = "gameOver"
         addChild(gameOverLabel)
+
+        let scoreResultLabel = SKLabelNode(fontNamed: "Helvetica-Bold")
+        scoreResultLabel.text = "Score: \(score)"
+        scoreResultLabel.fontSize = 28
+        scoreResultLabel.fontColor = .white
+        scoreResultLabel.position = CGPoint(x: size.width / 2, y: size.height / 2 + 15)
+        scoreResultLabel.zPosition = 20
+        scoreResultLabel.name = "gameOver"
+        addChild(scoreResultLabel)
+
+        let highScoreLabel = SKLabelNode(fontNamed: "Helvetica")
+        highScoreLabel.text = isNewHighScore ? "New Best: \(highScore)!" : "Best: \(highScore)"
+        highScoreLabel.fontSize = 22
+        highScoreLabel.fontColor = isNewHighScore ? SKColor.yellow : SKColor.white
+        highScoreLabel.position = CGPoint(x: size.width / 2, y: size.height / 2 - 20)
+        highScoreLabel.zPosition = 20
+        highScoreLabel.name = "gameOver"
+        addChild(highScoreLabel)
 
         let restartLabel = SKLabelNode(fontNamed: "Helvetica")
         restartLabel.text = "Tap to Restart"
         restartLabel.fontSize = 22
         restartLabel.fontColor = .white
-        restartLabel.position = CGPoint(x: size.width / 2, y: size.height / 2 - 20)
+        restartLabel.position = CGPoint(x: size.width / 2, y: size.height / 2 - 60)
         restartLabel.zPosition = 20
         restartLabel.name = "gameOver"
         addChild(restartLabel)
@@ -254,6 +301,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func restartGame() {
         canRestart = false
         isGameOver = false
+
+        // Reset score
+        score = 0
+        scoreLabel.text = "0"
+        scoreLabel.alpha = 0  // Hide until game starts
 
         // Remove game over labels
         enumerateChildNodes(withName: "gameOver") { node, _ in
@@ -285,8 +337,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if collision & PhysicsCategory.frog != 0 {
             if collision & PhysicsCategory.ground != 0 || collision & PhysicsCategory.obstacle != 0 {
                 gameOver()
+            } else if collision & PhysicsCategory.scoreZone != 0 {
+                // Find the obstacle pair and mark as passed
+                let scoreZoneNode = contact.bodyA.categoryBitMask == PhysicsCategory.scoreZone
+                    ? contact.bodyA.node : contact.bodyB.node
+
+                if let obstaclePair = scoreZoneNode?.parent as? ObstaclePair, !obstaclePair.passed {
+                    obstaclePair.markAsPassed()
+                    incrementScore()
+                }
             }
         }
+    }
+
+    // MARK: - Scoring
+
+    private func incrementScore() {
+        score += 1
+        scoreLabel.text = "\(score)"
+
+        // Brief scale animation for feedback
+        let scaleUp = SKAction.scale(to: 1.2, duration: 0.1)
+        let scaleDown = SKAction.scale(to: 1.0, duration: 0.1)
+        scoreLabel.run(SKAction.sequence([scaleUp, scaleDown]))
     }
 
     // MARK: - Game Loop

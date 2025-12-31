@@ -69,19 +69,19 @@ Game ends on collision. Player can restart by tapping.
 **Goal**: Track and display score.
 
 ### Tasks
-- [ ] Add invisible score zone in gap between obstacles
-- [ ] Detect when frog passes through score zone
-- [ ] Increment score counter
-- [ ] Display score label (top center of screen)
-- [ ] Show final score on game over
-- [ ] Track and display high score (persist with UserDefaults)
+- [x] Add invisible score zone in gap between obstacles
+- [x] Detect when frog passes through score zone
+- [x] Increment score counter
+- [x] Display score label (top center of screen)
+- [x] Show final score on game over
+- [x] Track and display high score (persist with UserDefaults)
 
 ### Deliverable
 Score increments when passing obstacles. High score persists between sessions.
 
 ---
 
-## Phase 5: Game States & Menu
+## Phase 5: Game States & Menu (Deferred/Optional)
 
 **Goal**: Proper game flow with start menu.
 
@@ -98,22 +98,41 @@ Complete game flow from title → gameplay → game over → restart.
 
 ---
 
-## Phase 6: Visual Assets & Animation
+## Phase 6.1: Sprites
 
-**Goal**: Replace placeholders with actual frog graphics and animations.
+**Goal**: Replace placeholders with actual frog graphics.
 
 ### Tasks
-- [ ] Create/obtain frog sprite (or sprite sheet)
-- [ ] Add flapping animation (wing up/down frames)
-- [ ] Create obstacle sprites (lily pads, logs, or pipes)
-- [ ] Add parallax scrolling background layers
-- [ ] Create ground texture that tiles seamlessly
-- [ ] Add visual feedback on score (brief flash or scale)
+- [x] Create/obtain frog sprite (or sprite sheet)
+- [x] Create obstacle sprites (lily pads, logs, or pipes)
 
 ### Deliverable
 Game looks polished with proper art assets and animations.
 
+## Phase 6.2: Background
+
+**Goal**: Create a proper scrolling background.
+
+### Tasks
+- [ ] Add parallax scrolling background layers
+- [ ] Create ground texture that tiles seamlessly
+
+### Deliverable
+Game looks polished with proper art assets and animations.
 ---
+
+## Phase 6.3: Visual Feedback
+
+**Goal**: Make visuals more polished. 
+
+### Tasks
+- [ ] Add visual feedback on score (brief flash or scale)
+
+### Deliverable
+Game looks polished with proper art assets and animations.
+---
+
+
 
 ## Phase 7: Audio & Polish
 
@@ -197,8 +216,8 @@ FlyingFrogs/
 |-------|--------|-------|
 | 1. Core Physics | ✅ Complete | FrogSprite, gravity, flap, rotation, boundaries |
 | 2. Scrolling World | ✅ Complete | ObstaclePair, spawning, scrolling ground |
-| 3. Collision & Game Over | Not Started | |
-| 4. Scoring | Not Started | |
+| 3. Collision & Game Over | ✅ Complete | Already implemented in Phase 1 & 2 |
+| 4. Scoring | ✅ Complete | Score display, high score with UserDefaults |
 | 5. Game States | Not Started | |
 | 6. Visual Assets | Not Started | |
 | 7. Audio & Polish | Not Started | |
