@@ -11,14 +11,14 @@ class FrogSprite: SKSpriteNode {
 
     // MARK: - Constants
 
-    private let flapImpulse: CGFloat = 35
+    private let flapImpulse: CGFloat = 12
     private let maxUpwardRotation: CGFloat = .pi / 6      // 30 degrees up
     private let maxDownwardRotation: CGFloat = -.pi / 2   // 90 degrees down
 
     // MARK: - Initialization
 
     init() {
-        let texture = SKTexture(imageNamed: "Frog")
+        let texture = SKTexture(imageNamed: "FrogRight")
         let size = CGSize(width: 50, height: 38)  // Scaled from 80x60 SVG
 
         super.init(texture: texture, color: .clear, size: size)
@@ -34,8 +34,10 @@ class FrogSprite: SKSpriteNode {
     // MARK: - Setup
 
     private func setupPhysics() {
-        // Create physics body matching sprite size
-        physicsBody = SKPhysicsBody(rectangleOf: size)
+        // Use circular physics body smaller than sprite for forgiving collision
+        // Radius ~15 is smaller than half the sprite height (38/2 = 19)
+        let collisionRadius: CGFloat = 14
+        physicsBody = SKPhysicsBody(circleOfRadius: collisionRadius)
         physicsBody?.allowsRotation = false  // We control rotation manually
         physicsBody?.restitution = 0         // No bounce
         physicsBody?.friction = 0
